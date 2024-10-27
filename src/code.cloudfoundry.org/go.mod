@@ -15,15 +15,15 @@ replace github.com/gogo/protobuf => github.com/gogo/protobuf v1.3.2
 exclude code.cloudfoundry.org/executor v0.1442.0
 
 require (
-	code.cloudfoundry.org/cf-networking-helpers v0.20.0
-	code.cloudfoundry.org/debugserver v0.18.0
-	code.cloudfoundry.org/diego-logging-client v0.24.0
+	code.cloudfoundry.org/cf-networking-helpers v0.22.0
+	code.cloudfoundry.org/debugserver v0.20.0
+	code.cloudfoundry.org/diego-logging-client v0.25.0
 	code.cloudfoundry.org/executor v0.0.0-20230406153242-208a08c51850
-	code.cloudfoundry.org/filelock v0.14.0
-	code.cloudfoundry.org/garden v0.0.0-20241018132925-991b03c78f6c
+	code.cloudfoundry.org/filelock v0.15.0
+	code.cloudfoundry.org/garden v0.0.0-20241023020423-a21e43a17f84
 	code.cloudfoundry.org/go-loggregator/v9 v9.2.1
-	code.cloudfoundry.org/lager/v3 v3.10.0
-	code.cloudfoundry.org/policy_client v0.23.0
+	code.cloudfoundry.org/lager/v3 v3.11.0
+	code.cloudfoundry.org/policy_client v0.24.0
 	code.cloudfoundry.org/runtimeschema v0.0.0-20240514235758-31be7684c5bf
 	github.com/cloudfoundry/dropsonde v1.1.0
 	github.com/containernetworking/cni v1.2.3
@@ -48,11 +48,11 @@ require (
 )
 
 require (
-	code.cloudfoundry.org/bbs v0.0.0-20241016070240-e04c7c1be286 // indirect
+	code.cloudfoundry.org/bbs v0.0.0-20241026000759-2d81b9f6ff2a // indirect
 	code.cloudfoundry.org/clock v1.1.0 // indirect
 	code.cloudfoundry.org/go-diodes v0.0.0-20241007161556-ec30366c7912 // indirect
 	code.cloudfoundry.org/locket v0.0.0-20230406154009-5e8522d975d2 // indirect
-	code.cloudfoundry.org/routing-info v0.0.0-20240611155555-dd78756e41b6 // indirect
+	code.cloudfoundry.org/routing-info v0.0.0-20241025163841-3f7521aac814 // indirect
 	code.cloudfoundry.org/tlsconfig v0.7.0 // indirect
 	filippo.io/edwards25519 v1.1.0 // indirect
 	github.com/alexflint/go-filemutex v1.3.0 // indirect
@@ -64,7 +64,7 @@ require (
 	github.com/go-test/deep v1.1.0 // indirect
 	github.com/gogo/protobuf v1.3.2 // indirect
 	github.com/google/go-cmp v0.6.0 // indirect
-	github.com/google/pprof v0.0.0-20241017200806-017d972448fc // indirect
+	github.com/google/pprof v0.0.0-20241023014458-598669927662 // indirect
 	github.com/hashicorp/errwrap v1.1.0 // indirect
 	github.com/jackc/pgx/v5 v5.5.5 // indirect
 	github.com/nu7hatch/gouuid v0.0.0-20131221200532-179d4d0c4d8d // indirect
@@ -79,7 +79,7 @@ require (
 	golang.org/x/sys v0.26.0 // indirect
 	golang.org/x/text v0.19.0 // indirect
 	golang.org/x/tools v0.26.0 // indirect
-	google.golang.org/genproto/googleapis/rpc v0.0.0-20241015192408-796eee8c2d53 // indirect
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20241021214115-324edc3d5d38 // indirect
 	google.golang.org/grpc v1.67.1 // indirect
 	google.golang.org/protobuf v1.35.1 // indirect
 	gopkg.in/fsnotify.v1 v1.4.7 // indirect
