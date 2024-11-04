@@ -3,10 +3,14 @@ package common
 import (
 	"code.cloudfoundry.org/lager/v3/lagerflags"
 	"fmt"
+	"github.com/pkg/errors"
 	"math"
-	"syscall"
 	"time"
 )
+
+type temporaryError interface {
+	Temporary() bool
+}
 
 type RetryableFunc[T any] func() (T, error)
 
@@ -47,8 +51,11 @@ func RetryWithBackoff[T any](interval int, maxRetries int, fn RetryableFunc[T]) 
 }
 
 func isRetryableError(err error) bool {
-	if errno, ok := err.(syscall.Errno); ok {
-		return errno.Temporary()
+	var tempErr temporaryError
+
+	if errors.As(err, &tempErr) {
+		return tempErr.Temporary()
 	}
+
 	return false
 }
