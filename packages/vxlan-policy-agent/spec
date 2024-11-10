@@ -111,6 +111,8 @@ files:
   - code.cloudfoundry.org/vendor/google.golang.org/grpc/balancer/base/*.go # gosub-main-module
   - code.cloudfoundry.org/vendor/google.golang.org/grpc/balancer/grpclb/state/*.go # gosub-main-module
   - code.cloudfoundry.org/vendor/google.golang.org/grpc/balancer/pickfirst/*.go # gosub-main-module
+  - code.cloudfoundry.org/vendor/google.golang.org/grpc/balancer/pickfirst/internal/*.go # gosub-main-module
+  - code.cloudfoundry.org/vendor/google.golang.org/grpc/balancer/pickfirst/pickfirstleaf/*.go # gosub-main-module
   - code.cloudfoundry.org/vendor/google.golang.org/grpc/balancer/roundrobin/*.go # gosub-main-module
   - code.cloudfoundry.org/vendor/google.golang.org/grpc/binarylog/grpc_binarylog_v1/*.go # gosub-main-module
   - code.cloudfoundry.org/vendor/google.golang.org/grpc/channelz/*.go # gosub-main-module
