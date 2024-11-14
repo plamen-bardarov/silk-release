@@ -1,0 +1,120 @@
+name: silk
+version: 3.55.0
+commit_hash: 0739e9ba
+uncommitted_changes: false
+jobs:
+- name: iptables-logger
+  version: c8ae664c3ff7550fcc0fad61553dcb3e2ac4112942f5c28e705b5376d9e12b8b
+  fingerprint: c8ae664c3ff7550fcc0fad61553dcb3e2ac4112942f5c28e705b5376d9e12b8b
+  sha1: sha256:37c6aebed9ba5aa07139d3f4bcbad3c6c0ed7ead3ecdd617b3c3c619c1c6bc38
+  packages:
+  - iptables-logger
+- name: netmon
+  version: e192440c7e7f27245a794c69839243c746b499d3b6db840cc4580d3ed3fed915
+  fingerprint: e192440c7e7f27245a794c69839243c746b499d3b6db840cc4580d3ed3fed915
+  sha1: sha256:3eeb482a57a987d57014eb876afec8b456676d8336c7d5066e0eb57af763fe2f
+  packages:
+  - netmon
+  - silk-ctl-utils
+- name: silk-cni
+  version: 85378bf106c2f8cac7ef76743d1e62267cacb29faf8b8b4bc0e6f633ffe3a701
+  fingerprint: 85378bf106c2f8cac7ef76743d1e62267cacb29faf8b8b4bc0e6f633ffe3a701
+  sha1: sha256:7277fd8d37e6e509d73e480cf0427e791a691b1cca19c22addba29c6fc2dd45c
+  packages:
+  - silk-cni
+- name: silk-controller
+  version: ef245d105e61603791664def93236ba3b04a4fc20f616cc133333b7c935b6d8f
+  fingerprint: ef245d105e61603791664def93236ba3b04a4fc20f616cc133333b7c935b6d8f
+  sha1: sha256:54bf3b2f87adf079b9f156b76658a415897856c219a0e20c0c0138dec2ad2c6f
+  packages:
+  - silk-controller
+  - silk-ctl-utils
+- name: silk-daemon
+  version: b638064fb5d479ae86e0c1ed02b7cc20c02bf192d6e5f4f6ce87855bef5ccaf7
+  fingerprint: b638064fb5d479ae86e0c1ed02b7cc20c02bf192d6e5f4f6ce87855bef5ccaf7
+  sha1: sha256:955cbfe4bb504c39459353af1b38d20f7fdbdc09f1fdb1d0d0826e5d1e02f84c
+  packages:
+  - silk-daemon
+  - silk-ctl-utils
+  - silk-healthchecker
+- name: silk-datastore-syncer
+  version: e0b5465c31989d338f77408c23117ab531312dc7bf8037a657b4c589906bd030
+  fingerprint: e0b5465c31989d338f77408c23117ab531312dc7bf8037a657b4c589906bd030
+  sha1: sha256:b0d9147af3e0abe073458944c6832deee361dd5228db9f0d265fbdf33aa67ebc
+  packages:
+  - silk-datastore-syncer
+- name: vxlan-policy-agent
+  version: ad5646928f4006cd0be1142a323154895367da8020d94f8b36ca3f4d5632bfc2
+  fingerprint: ad5646928f4006cd0be1142a323154895367da8020d94f8b36ca3f4d5632bfc2
+  sha1: sha256:faed735b05f7a796d549f758c15fdee634d5374af780a4d164e2d796fbd4fce7
+  packages:
+  - vxlan-policy-agent
+  - silk-ctl-utils
+packages:
+- name: golang-1.23-linux
+  version: 9558cab82cc598437084bfa9f169c53a77ed152b2632c4b83c4075144d30f338
+  fingerprint: 9558cab82cc598437084bfa9f169c53a77ed152b2632c4b83c4075144d30f338
+  sha1: sha256:22e8c625940a1fc63df5a53f122677b016c14a32f47f44fdaa6e683243f805af
+  dependencies: []
+- name: iptables-logger
+  version: 2130f267c4a2e6d3639785e5ee4db8db3c54d41b094a9f6faee0914d39e50632
+  fingerprint: 2130f267c4a2e6d3639785e5ee4db8db3c54d41b094a9f6faee0914d39e50632
+  sha1: sha256:7db5c388c650e0f2aa13b19a95fecab75628b5065c74d9a44173b01f55e0f933
+  dependencies:
+  - golang-1.23-linux
+- name: netmon
+  version: 5718968fec769e8f4364cc786ef6f77be3a543ca2770a272de64d0165a230fd3
+  fingerprint: 5718968fec769e8f4364cc786ef6f77be3a543ca2770a272de64d0165a230fd3
+  sha1: sha256:f61c3292f22813431ecf70bee9e8aed6e4cc06b2a2f3cccc262906b0588ee904
+  dependencies:
+  - golang-1.23-linux
+- name: silk-cni
+  version: c1b4f1e8d67cc2a9eae096bd8aff34f303a155ef82f65888dcf3b11a3dcb3850
+  fingerprint: c1b4f1e8d67cc2a9eae096bd8aff34f303a155ef82f65888dcf3b11a3dcb3850
+  sha1: sha256:dac8774ffbae33783f38b232f73c9ad2bcc5f505732e8a917da625e31a071ba7
+  dependencies:
+  - golang-1.23-linux
+- name: silk-controller
+  version: 3d1d0ae9d761371e0f49484bd277a1a2de3e5db8dcfa1b4b18c92c4a368a966f
+  fingerprint: 3d1d0ae9d761371e0f49484bd277a1a2de3e5db8dcfa1b4b18c92c4a368a966f
+  sha1: sha256:00d5f784119d5abf3855173682bbc6eae98c398b9651c516e9d4611c4785df41
+  dependencies:
+  - golang-1.23-linux
+- name: silk-ctl-utils
+  version: b72d9d24803265d5310393104a03571e7989c94db659c30f8fd9e205ce2b02f7
+  fingerprint: b72d9d24803265d5310393104a03571e7989c94db659c30f8fd9e205ce2b02f7
+  sha1: sha256:1d69986da87816bf06ad69868dcea1fc0c0bfa53851ed0a4461ce4f72cd4ca9c
+  dependencies: []
+- name: silk-daemon
+  version: 5ebe455ec95aad042a5dcd1a9bf2d9347d1a61cf9ea9d00ee4ab7487c65bd9c4
+  fingerprint: 5ebe455ec95aad042a5dcd1a9bf2d9347d1a61cf9ea9d00ee4ab7487c65bd9c4
+  sha1: sha256:7156904e98b19e4903e55b6b55ab811761e7dccc5a41ed735a234d80783d366a
+  dependencies:
+  - golang-1.23-linux
+- name: silk-datastore-syncer
+  version: 822362afe557eb8ac432134879677c147e49683b8b002fc4696dab6c572eadbc
+  fingerprint: 822362afe557eb8ac432134879677c147e49683b8b002fc4696dab6c572eadbc
+  sha1: sha256:726fa201e5ff93d1fe3ab50ac73719aea9ed57610e09dab4931f615e22d6ee4f
+  dependencies:
+  - golang-1.23-linux
+- name: silk-golang-1.23-linux
+  version: 9558cab82cc598437084bfa9f169c53a77ed152b2632c4b83c4075144d30f338
+  fingerprint: 9558cab82cc598437084bfa9f169c53a77ed152b2632c4b83c4075144d30f338
+  sha1: sha256:22e8c625940a1fc63df5a53f122677b016c14a32f47f44fdaa6e683243f805af
+  dependencies: []
+- name: silk-healthchecker
+  version: b453cba4fef8f39779cb20703cb3e1c17266c13e2961b06d58fb7df6c69b3d2a
+  fingerprint: b453cba4fef8f39779cb20703cb3e1c17266c13e2961b06d58fb7df6c69b3d2a
+  sha1: sha256:eb1c7458614460a3b30efe91e33e73a845e1cde2bb985b9f65701cfbb4b742d0
+  dependencies:
+  - silk-golang-1.23-linux
+- name: vxlan-policy-agent
+  version: 4761f4fd591e3d00615cdf3d19b5a5609079c915f0d9e845c95c5daebdf3d2ce
+  fingerprint: 4761f4fd591e3d00615cdf3d19b5a5609079c915f0d9e845c95c5daebdf3d2ce
+  sha1: sha256:21199288dba7a74f66e6c0b70e9093245645c16f130c59c6fc911365672796d7
+  dependencies:
+  - golang-1.23-linux
+license:
+  version: 3825f8fb1942bc00b1527f432019c04f8e9c6f236c4678b7a40b049595a6ef25
+  fingerprint: 3825f8fb1942bc00b1527f432019c04f8e9c6f236c4678b7a40b049595a6ef25
+  sha1: sha256:4cc8ed30da2f0313a633ac0a08a485f1d3b6edd86c216ea25dd446594e3922f2
