@@ -594,8 +594,8 @@ cloud.google.com/go/workflows v1.9.0/go.mod h1:ZGkj1aFIOd9c8Gerkjjq7OW7I5+l6cSvT
 cloud.google.com/go/workflows v1.10.0/go.mod h1:fZ8LmRmZQWacon9UCX1r/g/DfAXx5VcPALq2CxzdePw=
 code.cloudfoundry.org/bbs v0.0.0-20241029001107-2bebce403fed h1:lcK8khEvQegfbSrJ3YYGNxq3oVK9GYvG9Sh1dLXQIwc=
 code.cloudfoundry.org/bbs v0.0.0-20241029001107-2bebce403fed/go.mod h1:XKlGVVXFi5EcHHMPzw3xgONK9PeEZuUbIC43XNwxD10=
-code.cloudfoundry.org/cf-networking-helpers v0.26.0 h1:+zCenLxlk2+ynddAsggjGuCtfwHGRawlmo+dd/QNtYM=
-code.cloudfoundry.org/cf-networking-helpers v0.26.0/go.mod h1:p1+1nbsdu9DUXNubyTJ0kRzFyES7vG14KxVYeAKXRBA=
+code.cloudfoundry.org/cf-networking-helpers v0.27.0 h1:dXmYFg3tuRXIv20jQaHKVO2OKQ0K01N3BOJ44Td3Dng=
+code.cloudfoundry.org/cf-networking-helpers v0.27.0/go.mod h1:k6aIUBQeon9LY6q+bW4Sgh38TAGmC6JkBib/AOiPcag=
 code.cloudfoundry.org/clock v1.1.0 h1:XLzC6W3Ah/Y7ht1rmZ6+QfPdt1iGWEAAtIZXgiaj57c=
 code.cloudfoundry.org/clock v1.1.0/go.mod h1:yA3fxddT9RINQL2XHS7PS+OXxKCGhfrZmlNUCIM6AKo=
 code.cloudfoundry.org/debugserver v0.25.0 h1:D13+4IIT95Fbdfsk1Q6sviBJmJFhQJfKmTNpzFdmjU4=
@@ -616,8 +616,8 @@ code.cloudfoundry.org/lager/v3 v3.15.0 h1:n31lbeh9krwuQLCRUWNEVZBk/BFEtyhQBwDZxF
 code.cloudfoundry.org/lager/v3 v3.15.0/go.mod h1:x5XGPsP6QF0HMW/FpRilBHu4gy+cWRur8/fiZEyj6z8=
 code.cloudfoundry.org/locket v0.0.0-20230406154009-5e8522d975d2 h1:tUpafuylA0aTl6sdQnf20OsO/ipCvdNSZlWOB1cHhz8=
 code.cloudfoundry.org/locket v0.0.0-20230406154009-5e8522d975d2/go.mod h1:AwHLRkdXtttLXNB8RHgLfErJ2kKafH62AR2OClhy6xI=
-code.cloudfoundry.org/policy_client v0.28.0 h1:Xa4rlKgMgN8lnHk117Y1vDA2I785OnQPyVSl93qgAnU=
-code.cloudfoundry.org/policy_client v0.28.0/go.mod h1:Psfv3GiKA+6WzrivPl/1OOoxaZkLBvx/XRMInYJV3XQ=
+code.cloudfoundry.org/policy_client v0.29.0 h1:eWlsINtMN9DaFLq/hCbU8ktUW1vUzqmjVSDyHgq+7Vo=
+code.cloudfoundry.org/policy_client v0.29.0/go.mod h1:Ccw9xWyLPHz3HQy1kmD0cDWa37pHP28uCTMnTX9oLWs=
 code.cloudfoundry.org/routing-info v0.0.0-20241025163841-3f7521aac814 h1:m8m8wsEpS2+Iat7FzYp8XmAui2glgvCt0tpmRhHH8/U=
 code.cloudfoundry.org/routing-info v0.0.0-20241025163841-3f7521aac814/go.mod h1:ykLgqzJGV5PTkvxtfyOy8hcQy7wxPaoV5ZPyk74aqp8=
 code.cloudfoundry.org/runtimeschema v0.0.0-20180622181441-7dcd19348be6 h1:J08p1/LBnhv5BDDf0WLpHRyMJFCws3vd3fLCFL/iVnQ=
@@ -821,8 +821,8 @@ github.com/google/pprof v0.0.0-20210407192527-94a9f03dee38/go.mod h1:kpwsk12EmLe
 github.com/google/pprof v0.0.0-20210601050228-01bbb1931b22/go.mod h1:kpwsk12EmLew5upagYY7GY0pfYCcupk39gWOCRROcvE=
 github.com/google/pprof v0.0.0-20210609004039-a478d1d731e9/go.mod h1:kpwsk12EmLew5upagYY7GY0pfYCcupk39gWOCRROcvE=
 github.com/google/pprof v0.0.0-20210720184732-4bb14d4b1be1/go.mod h1:kpwsk12EmLew5upagYY7GY0pfYCcupk39gWOCRROcvE=
-github.com/google/pprof v0.0.0-20241101162523-b92577c0c142 h1:sAGdeJj0bnMgUNVeUpp6AYlVdCt3/GdI3pGRqsNSQLs=
-github.com/google/pprof v0.0.0-20241101162523-b92577c0c142/go.mod h1:vavhavw2zAxS5dIdcRluK6cSGGPlZynqzFM8NdvU144=
+github.com/google/pprof v0.0.0-20241122213907-cbe949e5a41b h1:SXO0REt4iu865upYCk8aKBBJQ4BqoE0ReP23ClMu60s=
+github.com/google/pprof v0.0.0-20241122213907-cbe949e5a41b/go.mod h1:vavhavw2zAxS5dIdcRluK6cSGGPlZynqzFM8NdvU144=
 github.com/google/renameio v0.1.0/go.mod h1:KWCgfxg9yswjAJkECMjeO8J8rahYeXnNhOm40UhjYkI=
 github.com/google/shlex v0.0.0-20191202100458-e7afc7fbc510 h1:El6M4kTTCOh6aBiKaUGG7oYTSPP8MxqL4YI3kZKwcP4=
 github.com/google/shlex v0.0.0-20191202100458-e7afc7fbc510/go.mod h1:pupxD2MaaD3pAXIBCelhxNneeOaAeabZDe5s4K6zSpQ=
