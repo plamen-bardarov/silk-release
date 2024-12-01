@@ -15,15 +15,15 @@ replace github.com/gogo/protobuf => github.com/gogo/protobuf v1.3.2
 exclude code.cloudfoundry.org/executor v0.1442.0
 
 require (
-	code.cloudfoundry.org/cf-networking-helpers v0.27.0
-	code.cloudfoundry.org/debugserver v0.25.0
-	code.cloudfoundry.org/diego-logging-client v0.30.0
+	code.cloudfoundry.org/cf-networking-helpers v0.28.0
+	code.cloudfoundry.org/debugserver v0.26.0
+	code.cloudfoundry.org/diego-logging-client v0.31.0
 	code.cloudfoundry.org/executor v0.0.0-20230406153242-208a08c51850
-	code.cloudfoundry.org/filelock v0.19.0
-	code.cloudfoundry.org/garden v0.0.0-20241120020832-f199cabc97c3
+	code.cloudfoundry.org/filelock v0.20.0
+	code.cloudfoundry.org/garden v0.0.0-20241127021034-06ec4d3844e0
 	code.cloudfoundry.org/go-loggregator/v9 v9.2.1
-	code.cloudfoundry.org/lager/v3 v3.15.0
-	code.cloudfoundry.org/policy_client v0.29.0
+	code.cloudfoundry.org/lager/v3 v3.16.0
+	code.cloudfoundry.org/policy_client v0.30.0
 	code.cloudfoundry.org/runtimeschema v0.0.0-20240514235758-31be7684c5bf
 	github.com/cloudfoundry/dropsonde v1.1.0
 	github.com/containernetworking/cni v1.2.3
@@ -37,7 +37,7 @@ require (
 	github.com/jmoiron/sqlx v1.4.0
 	github.com/lib/pq v1.10.9
 	github.com/onsi/ginkgo/v2 v2.22.0
-	github.com/onsi/gomega v1.35.1
+	github.com/onsi/gomega v1.36.0
 	github.com/pivotal-cf-experimental/gomegamatchers v0.0.0-20180326192815-e36bfcc98c3a
 	github.com/pkg/errors v0.9.1
 	github.com/rubenv/sql-migrate v1.7.0
@@ -52,7 +52,7 @@ require (
 require (
 	code.cloudfoundry.org/bbs v0.0.0-20241029001107-2bebce403fed // indirect
 	code.cloudfoundry.org/clock v1.1.0 // indirect
-	code.cloudfoundry.org/go-diodes v0.0.0-20241104194350-6f18271962f1 // indirect
+	code.cloudfoundry.org/go-diodes v0.0.0-20241125060457-612558937770 // indirect
 	code.cloudfoundry.org/locket v0.0.0-20230406154009-5e8522d975d2 // indirect
 	code.cloudfoundry.org/routing-info v0.0.0-20241025163841-3f7521aac814 // indirect
 	code.cloudfoundry.org/tlsconfig v0.10.0 // indirect
@@ -66,7 +66,7 @@ require (
 	github.com/go-test/deep v1.1.0 // indirect
 	github.com/gogo/protobuf v1.3.2 // indirect
 	github.com/google/go-cmp v0.6.0 // indirect
-	github.com/google/pprof v0.0.0-20241122213907-cbe949e5a41b // indirect
+	github.com/google/pprof v0.0.0-20241128161848-dc51965c6481 // indirect
 	github.com/hashicorp/errwrap v1.1.0 // indirect
 	github.com/jackc/pgx/v5 v5.5.5 // indirect
 	github.com/nu7hatch/gouuid v0.0.0-20131221200532-179d4d0c4d8d // indirect
