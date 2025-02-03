@@ -69,6 +69,11 @@ func mainWithError() error {
 	logger, reconfigurableSink := lagerflags.NewFromConfig(fmt.Sprintf("%s.%s", logPrefix, jobPrefix), getLagerConfig(logLevel))
 	logger.Info("starting")
 
+	if cfg.IPv6Prefix != "" && !isIPv6Enabled() {
+		logger.Info("The IPv6 prefix is supplied but the host is not IPv6 Enabled")
+		cfg.IPv6Prefix = ""
+	}
+
 	tlsConfig, err := mutualtls.NewClientTLSConfig(cfg.ClientCertFile, cfg.ClientKeyFile, cfg.ServerCACertFile)
 	if err != nil {
 		return fmt.Errorf("create tls config: %s", err)
@@ -299,10 +304,20 @@ func getNetworkInfo(vtepFactory *vtep.Factory, clientConfig config.Config, lease
 		return daemon.NetworkInfo{}, fmt.Errorf("get vtep mtu: %s", err) // not tested
 	}
 
-	return daemon.NetworkInfo{
+	info := daemon.NetworkInfo{
 		OverlaySubnet: lease.OverlaySubnet,
 		MTU:           mtu,
-	}, nil
+	}
+
+	if clientConfig.IPv6Prefix != "" {
+		if validateIPv6CIDR(clientConfig.IPv6Prefix) {
+			info.IPv6Prefix = clientConfig.IPv6Prefix
+		} else {
+			return daemon.NetworkInfo{}, fmt.Errorf("IPv6 prefix is set but not valid: %s", clientConfig.IPv6Prefix)
+		}
+	}
+
+	return info, nil
 }
 
 func deleteAndAcquire(cfg config.Config, logger lager.Logger, client *controller.Client, vtepConfigCreator *vtep.ConfigCreator, vtepFactory *vtep.Factory) (controller.Lease, error) {
@@ -318,4 +333,30 @@ func getLagerConfig(level string) lagerflags.LagerConfig {
 	lagerConfig.TimeFormat = lagerflags.FormatRFC3339
 	lagerConfig.LogLevel = level
 	return lagerConfig
+}
+
+func validateIPv6CIDR(cidr string) bool {
+	ip, network, err := net.ParseCIDR(cidr)
+	if err != nil {
+		return false
+	}
+
+	return ip.To4() == nil && network.IP.To4() == nil
+}
+
+func isIPv6Enabled() bool {
+	testAddress := "[::1]:0"
+
+	addr, err := net.ResolveUDPAddr("udp6", testAddress)
+	if err != nil {
+		return false
+	}
+
+	conn, err := net.ListenUDP("udp6", addr)
+	if err != nil {
+		return false
+	}
+	defer conn.Close()
+
+	return true
 }

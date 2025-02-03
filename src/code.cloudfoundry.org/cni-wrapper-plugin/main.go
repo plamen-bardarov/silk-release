@@ -5,23 +5,20 @@ import (
 	"fmt"
 	"io"
 	"net"
+	"net/http"
 	"os"
+	"os/user"
+	"strconv"
 	"sync"
 
 	"code.cloudfoundry.org/cni-wrapper-plugin/adapter"
 	"code.cloudfoundry.org/cni-wrapper-plugin/lib"
 	"code.cloudfoundry.org/cni-wrapper-plugin/netrules"
+	"code.cloudfoundry.org/filelock"
 	"code.cloudfoundry.org/lib/datastore"
 	"code.cloudfoundry.org/lib/interfacelookup"
 	"code.cloudfoundry.org/lib/rules"
 	"code.cloudfoundry.org/lib/serial"
-
-	"net/http"
-
-	"os/user"
-	"strconv"
-
-	"code.cloudfoundry.org/filelock"
 	"github.com/containernetworking/cni/pkg/skel"
 	current "github.com/containernetworking/cni/pkg/types/100"
 	"github.com/containernetworking/cni/pkg/version"
@@ -49,7 +46,13 @@ func cmdAdd(args *skel.CmdArgs) error {
 		return fmt.Errorf("converting result from delegate plugin: %s", err) // not tested
 	}
 
-	containerIP := resultActual.IPs[0].Address.IP
+	var ips []net.IP
+	for _, ip := range resultActual.IPs {
+		ips = append(ips, ip.Address.IP)
+	}
+
+	containerIP, containerIPv6 := datastore.ValidatorIPConfig(ips)
+
 	var containerWorkload string
 
 	// Add container metadata info
@@ -70,9 +73,11 @@ func cmdAdd(args *skel.CmdArgs) error {
 	var cniAddData struct {
 		Metadata map[string]interface{}
 	}
+
 	if err := json.Unmarshal(args.StdinData, &cniAddData); err != nil {
 		return err // not tested, this should be impossible
 	}
+
 	if workload, present := cniAddData.Metadata["container_workload"]; present {
 		containerWorkload, _ = workload.(string)
 	}
@@ -85,10 +90,18 @@ func cmdAdd(args *skel.CmdArgs) error {
 		CustomNoMasqueradeCIDRRange: cfg.NoMasqueradeCIDRRange,
 	}
 
-	if err := store.Add(args.ContainerID, containerIP.String(), cniAddData.Metadata); err != nil {
+	err = store.Add(
+		args.ContainerID,
+		containerIP.String(),
+		cniAddData.Metadata,
+		datastore.WithIPv6(containerIPv6.String()),
+	)
+
+	if err != nil {
 		storeErr := fmt.Errorf("store add: %s", err)
 		fmt.Fprintf(os.Stderr, "%s", storeErr)
 		fmt.Fprint(os.Stderr, "cleaning up from error")
+
 		err := masquerader.DelIPMasq()
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "during cleanup: removing IP masq: %s", err)
@@ -101,10 +114,12 @@ func cmdAdd(args *skel.CmdArgs) error {
 	if err != nil {
 		return err
 	}
+
 	if resp.StatusCode != http.StatusOK {
 		body, _ := io.ReadAll(resp.Body)
 		// #nosec G104 - don't capture this error, as the one we generate below is more important to return
 		resp.Body.Close()
+
 		return fmt.Errorf("vpa response code: %v with message: %s", resp.StatusCode, body)
 	}
 
@@ -134,6 +149,7 @@ func cmdAdd(args *skel.CmdArgs) error {
 	chainNamer := &netrules.ChainNamer{
 		MaxLength: 28,
 	}
+
 	outConn := netrules.OutConn{
 		Limit:      cfg.OutConn.Limit,
 		Logging:    cfg.OutConn.Logging,
@@ -173,6 +189,7 @@ func cmdAdd(args *skel.CmdArgs) error {
 		DNSServers:            localDNSServers,
 		Conn:                  outConn,
 	}
+
 	if err := netOutProvider.Initialize(); err != nil {
 		return fmt.Errorf("initialize net out: %s", err)
 	}
@@ -185,6 +202,7 @@ func cmdAdd(args *skel.CmdArgs) error {
 		IngressTag:         cfg.IngressTag,
 		HostInterfaceNames: interfaceNames,
 	}
+
 	err = netinProvider.Initialize(args.ContainerID)
 	if err != nil {
 		return fmt.Errorf("initializing net in: %s", err)
@@ -216,6 +234,7 @@ func cmdAdd(args *skel.CmdArgs) error {
 		body, _ := io.ReadAll(resp.Body)
 		// #nosec G104 - don't capture this error, as the one we generate below is more important to return
 		resp.Body.Close()
+
 		return fmt.Errorf("asg sync returned %v with message: %s", resp.StatusCode, body)
 	}
 
@@ -230,6 +249,7 @@ func cmdAdd(args *skel.CmdArgs) error {
 	if err != nil {
 		return fmt.Errorf("converting to CNI version %s: %s", cfg.CNIVersion, err)
 	}
+
 	return resultVersioned.Print()
 }
 

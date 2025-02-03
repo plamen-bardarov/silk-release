@@ -83,11 +83,13 @@ func main() {
 		NetlinkAdapter: netlinkAdapter,
 		Logger:         logger,
 	}
+
 	commonSetup := &lib.Common{
 		NetlinkAdapter: netlinkAdapter,
 		LinkOperations: linkOperations,
 		Logger:         logger.Session("common-setup"),
 	}
+
 	store := &datastore.Store{
 		Serializer: &serial.Serial{},
 		LockerNew:  filelock.NewLocker,
@@ -125,6 +127,7 @@ func main() {
 		Check: plugin.cmdCheck,
 		Del:   plugin.cmdDel,
 	}
+
 	skel.PluginMainFuncs(funcs, version.PluginSupports("1.0.0"), "CNI Plugin silk-cni")
 }
 
@@ -184,6 +187,7 @@ func (p *CNIPlugin) cmdAdd(args *skel.CmdArgs) error {
 
 	var netConf NetConf
 	p.Logger.Debug("json-unmarshal-stdin-as-netconf")
+
 	err := json.Unmarshal(args.StdinData, &netConf)
 	if err != nil {
 		p.Logger.Error("json-unmarshal-stdin-as-netconf-failed", err)
@@ -191,22 +195,32 @@ func (p *CNIPlugin) cmdAdd(args *skel.CmdArgs) error {
 	}
 
 	p.Logger.Debug("getting-network-info", lager.Data{"netConf": netConf})
+
 	networkInfo, err := getNetworkInfo(netConf)
 	if err != nil {
 		p.Logger.Error("get-network-info-failed", err)
 		return typedError("discover network info", err)
 	}
 
-	p.Logger.Debug("generate-ipam-config", lager.Data{"overlaySubnet": networkInfo.OverlaySubnet, "name": netConf.Name, "dataDir": netConf.DataDir})
+	p.Logger.Debug("generate-ipam-config", lager.Data{
+		"overlaySubnet": networkInfo.OverlaySubnet,
+		"name":          netConf.Name,
+		"dataDir":       netConf.DataDir,
+		"ipv6prefix":    networkInfo.IPv6Prefix,
+	})
+
 	generator := config.IPAMConfigGenerator{}
-	ipamConfig, err := generator.GenerateConfig(networkInfo.OverlaySubnet, netConf.Name, netConf.DataDir)
+
+	ipamConfig, err := generator.GenerateConfig(networkInfo.OverlaySubnet, networkInfo.IPv6Prefix, netConf.Name, netConf.DataDir)
 	if err != nil {
 		p.Logger.Error("generate-ipam-config-failed", err)
 		return typedError("generate ipam config", err)
 	}
+
 	ipamConfigBytes, _ := json.Marshal(ipamConfig) // untestable
 
 	p.Logger.Debug("host-local-ipam", lager.Data{"action": "add", "ipamConfig": string(ipamConfigBytes)})
+
 	result, err := invoke.DelegateAdd(context.Background(), "host-local", ipamConfigBytes, nil)
 	if err != nil {
 		p.Logger.Error("host-local-ipam-failed", err)
@@ -214,6 +228,7 @@ func (p *CNIPlugin) cmdAdd(args *skel.CmdArgs) error {
 	}
 
 	p.Logger.Debug("convert-ipam-result", lager.Data{"result": result})
+
 	cniResult, err := current.NewResultFromResult(result)
 	if err != nil {
 		p.Logger.Error("convert-ipam-result-failed", err)
@@ -221,6 +236,7 @@ func (p *CNIPlugin) cmdAdd(args *skel.CmdArgs) error {
 	}
 
 	p.Logger.Debug("create-config", lager.Data{"hostNamespace": p.HostNS, "args": args, "result": cniResult, "mtu": networkInfo.MTU})
+
 	cfg, err := p.ConfigCreator.Create(p.HostNS, args, cniResult, networkInfo.MTU)
 	if err != nil {
 		p.Logger.Error("create-config-failed", err)
@@ -228,6 +244,7 @@ func (p *CNIPlugin) cmdAdd(args *skel.CmdArgs) error {
 	}
 
 	p.Logger.Debug("create-veth-pair", lager.Data{"cfg": cfg})
+
 	err = p.VethPairCreator.Create(cfg)
 	if err != nil {
 		p.Logger.Error("create-veth-pair-failed", err)
@@ -235,6 +252,7 @@ func (p *CNIPlugin) cmdAdd(args *skel.CmdArgs) error {
 	}
 
 	p.Logger.Debug("setup-host", lager.Data{"cfg": cfg})
+
 	err = p.Host.Setup(cfg)
 	if err != nil {
 		p.Logger.Error("setup-host-failed", err)
@@ -242,15 +260,46 @@ func (p *CNIPlugin) cmdAdd(args *skel.CmdArgs) error {
 	}
 
 	p.Logger.Debug("setup-container", lager.Data{"cfg": cfg})
+
 	err = p.Container.Setup(cfg)
 	if err != nil {
 		p.Logger.Error("setup-container-failed", err)
 		return typedError("set up container", err)
 	}
 
+	var ipv6 string
+
+	if cfg.IPV6Enabled() {
+		p.Logger.Debug("setup-host-ipv6", lager.Data{"cfg": cfg})
+
+		err = p.Host.SetupIPv6(cfg)
+		if err != nil {
+			p.Logger.Error("setup-host-failed", err)
+			return typedError("set up host", err)
+		}
+
+		p.Logger.Debug("setup-container", lager.Data{"cfg": cfg})
+
+		err = p.Container.SetupIPv6(cfg)
+		if err != nil {
+			p.Logger.Error("setup-container-failed", err)
+			return typedError("set up container", err)
+		}
+
+		ipv6 = cfg.Container.AddressIPv6.IP.String()
+	}
+
+	ip := cfg.Container.Address.IP.String()
+
 	// use args.Netns as the 'handle' for now
-	p.Logger.Debug("write-container-metadata", lager.Data{"datastore": netConf.Datastore, "path": filepath.Base(args.Netns), "ip": cfg.Container.Address.IP.String()})
-	err = p.Store.Add(netConf.Datastore, filepath.Base(args.Netns), cfg.Container.Address.IP.String(), nil)
+	p.Logger.Debug("write-container-metadata", lager.Data{
+		"datastore": netConf.Datastore,
+		"path":      filepath.Base(args.Netns),
+		"ip":        ip,
+		"ipv6":      ipv6,
+	})
+
+	err = p.Store.Add(netConf.Datastore, filepath.Base(args.Netns), ip, ipv6, nil)
 	if err != nil {
 		p.Logger.Error("write-container-metadata-failed", err)
 		return typedError("write container metadata", err)
@@ -280,7 +329,8 @@ func (p *CNIPlugin) cmdDel(args *skel.CmdArgs) error {
 	// use 0.0.0.0/0 for the IPAM subnet during delete so we don't need to discover the subnet.
 	// this way, silk-daemon does not need to be up during deletes, and cleanup that takes place
 	// on startup, after the subnet may have changed, will succeed.
-	ipamConfig, err := generator.GenerateConfig("0.0.0.0/0", netConf.Name, netConf.DataDir)
+	// TODO IPv6
+	ipamConfig, err := generator.GenerateConfig("0.0.0.0/0", "", netConf.Name, netConf.DataDir)
 	if err != nil {
 		p.Logger.Error("generate-ipam-config-failed", err) // untestable
 		// continue, keep trying to cleanup
