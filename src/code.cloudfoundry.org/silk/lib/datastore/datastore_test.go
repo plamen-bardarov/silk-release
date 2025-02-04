@@ -74,7 +74,7 @@ var _ = Describe("Datastore", func() {
 
 	Context("when adding an entry to store", func() {
 		It("deserializes the data from the file", func() {
-			err := store.Add(filePath, handle, ip, metadata)
+			err := store.Add(filePath, handle, ip, "", metadata)
 			Expect(err).NotTo(HaveOccurred())
 
 			Expect(lockerNewCallCount).To(Equal(1))
@@ -99,14 +99,14 @@ var _ = Describe("Datastore", func() {
 
 		Context("when handle is not valid", func() {
 			It("wraps and returns the error", func() {
-				err := store.Add(filePath, "", ip, metadata)
+				err := store.Add(filePath, "", ip, "", metadata)
 				Expect(err).To(MatchError("invalid handle"))
 			})
 		})
 
 		Context("when input IP is not valid", func() {
 			It("wraps and returns the error", func() {
-				err := store.Add(filePath, handle, "invalid-ip", metadata)
+				err := store.Add(filePath, handle, "invalid-ip", "", metadata)
 				Expect(err).To(MatchError("invalid ip: invalid-ip"))
 			})
 		})
@@ -116,7 +116,7 @@ var _ = Describe("Datastore", func() {
 				locker.OpenReturns(nil, errors.New("potato"))
 			})
 			It("wraps and returns the error", func() {
-				err := store.Add(filePath, handle, ip, metadata)
+				err := store.Add(filePath, handle, ip, "", metadata)
 				Expect(err).To(MatchError("open lock: potato"))
 			})
 		})
@@ -126,7 +126,7 @@ var _ = Describe("Datastore", func() {
 				serializer.DecodeAllReturns(errors.New("potato"))
 			})
 			It("wraps and returns the error", func() {
-				err := store.Add(filePath, handle, ip, metadata)
+				err := store.Add(filePath, handle, ip, "", metadata)
 				Expect(err).To(MatchError("decoding file: potato"))
 			})
 		})
@@ -136,7 +136,7 @@ var _ = Describe("Datastore", func() {
 				serializer.EncodeAndOverwriteReturns(errors.New("potato"))
 			})
 			It("wraps and returns the error", func() {
-				err := store.Add(filePath, handle, ip, metadata)
+				err := store.Add(filePath, handle, ip, "", metadata)
 				Expect(err).To(MatchError("encode and overwrite: potato"))
 			})
 		})

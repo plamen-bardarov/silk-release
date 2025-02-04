@@ -11,7 +11,7 @@ var _ = Describe("Ipam config generation", func() {
 	It("returns IPAM config object", func() {
 
 		generator := config.IPAMConfigGenerator{}
-		ipamConfig, err := generator.GenerateConfig("10.255.30.0/24", "some-network-name", "/some/data/dir")
+		ipamConfig, err := generator.GenerateConfig("10.255.30.0/24", "", "some-network-name", "/some/data/dir")
 		Expect(err).NotTo(HaveOccurred())
 
 		subnetAsIPNet, err := types.ParseCIDR("10.255.30.0/24")
@@ -37,7 +37,7 @@ var _ = Describe("Ipam config generation", func() {
 	Context("when the subnet is invalid", func() {
 		It("returns an error", func() {
 			generator := config.IPAMConfigGenerator{}
-			_, err := generator.GenerateConfig("10.255.30.0/33", "some-network-name", "/some/data/dir")
+			_, err := generator.GenerateConfig("10.255.30.0/33", "", "some-network-name", "/some/data/dir")
 			Expect(err).To(MatchError("invalid subnet: invalid CIDR address: 10.255.30.0/33"))
 		})
 	})

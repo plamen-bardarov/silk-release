@@ -60,7 +60,7 @@ var _ = Describe("Datastore Lifecycle", func() {
 	Context("when adding", func() {
 		It("can add entry to datastore", func() {
 			By("adding an entry to store")
-			err := store.Add(filepath, handle, ip, metadata)
+			err := store.Add(filepath, handle, ip, "", metadata)
 			Expect(err).NotTo(HaveOccurred())
 
 			By("verify entry is in store")
@@ -79,7 +79,7 @@ var _ = Describe("Datastore Lifecycle", func() {
 			By("adding an entries to store")
 			for i := 0; i < total; i++ {
 				id := fmt.Sprintf("%s-%d", handle, i)
-				err := store.Add(filepath, id, ip, metadata)
+				err := store.Add(filepath, id, ip, "", metadata)
 				Expect(err).NotTo(HaveOccurred())
 			}
 
@@ -93,7 +93,7 @@ var _ = Describe("Datastore Lifecycle", func() {
 	Context("when removing", func() {
 		It("can add entry and remove an entry from datastore", func() {
 			By("adding an entry to store")
-			err := store.Add(filepath, handle, ip, metadata)
+			err := store.Add(filepath, handle, ip, "", metadata)
 			Expect(err).NotTo(HaveOccurred())
 
 			By("verify entry is in store")
@@ -123,7 +123,7 @@ var _ = Describe("Datastore Lifecycle", func() {
 			By("adding an entries to store")
 			for i := 0; i < total; i++ {
 				id := fmt.Sprintf("%s-%d", handle, i)
-				err := store.Add(filepath, id, ip, metadata)
+				err := store.Add(filepath, id, ip, "", metadata)
 				Expect(err).NotTo(HaveOccurred())
 			}
 
@@ -167,7 +167,7 @@ var _ = Describe("Datastore Lifecycle", func() {
 				parallelRunner.RunOnSlice(containerHandles, func(containerHandle interface{}) {
 					p := containerHandle.(string)
 					func(id string) {
-						err := store.Add(filepath, id, ip, metadata)
+						err := store.Add(filepath, id, ip, "", metadata)
 						Expect(err).NotTo(HaveOccurred())
 					}(p)
 					toRead <- p
