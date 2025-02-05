@@ -31,6 +31,7 @@ var _ = Describe("Datastore", func() {
 	var (
 		handle   string
 		ip       string
+		ipv6     string
 		store    *datastore.Store
 		metadata map[string]interface{}
 
@@ -46,6 +47,7 @@ var _ = Describe("Datastore", func() {
 	BeforeEach(func() {
 		handle = fmt.Sprintf("handle-%s-%d", randStringBytes(5), GinkgoParallelProcess())
 		ip = fmt.Sprintf("192.168.0.%d", 100+GinkgoParallelProcess())
+		ipv6 = fmt.Sprintf("2001:db8::%d", 100+GinkgoParallelProcess())
 		filePath = "file"
 		locker = &libfakes.FileLocker{}
 		serializer = &libfakes.Serializer{}
@@ -87,14 +89,42 @@ var _ = Describe("Datastore", func() {
 			Expect(file).To(Equal(lockedFile))
 
 			_, actual := serializer.EncodeAndOverwriteArgsForCall(0)
-			expected := map[string]datastore.Container{
-				handle: datastore.Container{
+			expected := map[string]*datastore.Container{
+				handle: {
 					Handle:   handle,
 					IP:       ip,
+					IPv6:     "",
 					Metadata: metadata,
 				},
 			}
 			Expect(actual).To(Equal(expected))
+		})
+
+		Context("when IPv6 address is provided", func() {
+			It("deserializes the data from the file", func() {
+				err := store.Add(filePath, handle, ip, ipv6, metadata)
+				Expect(err).NotTo(HaveOccurred())
+
+				Expect(lockerNewCallCount).To(Equal(1))
+				Expect(lockerNewFilePath).To(Equal(filePath))
+				Expect(locker.OpenCallCount()).To(Equal(1))
+				Expect(serializer.DecodeAllCallCount()).To(Equal(1))
+				Expect(serializer.EncodeAndOverwriteCallCount()).To(Equal(1))
+
+				file, _ := serializer.DecodeAllArgsForCall(0)
+				Expect(file).To(Equal(lockedFile))
+
+				_, actual := serializer.EncodeAndOverwriteArgsForCall(0)
+				expected := map[string]*datastore.Container{
+					handle: {
+						Handle:   handle,
+						IP:       ip,
+						IPv6:     ipv6,
+						Metadata: metadata,
+					},
+				}
+				Expect(actual).To(Equal(expected))
+			})
 		})
 
 		Context("when handle is not valid", func() {
@@ -108,6 +138,13 @@ var _ = Describe("Datastore", func() {
 			It("wraps and returns the error", func() {
 				err := store.Add(filePath, handle, "invalid-ip", "", metadata)
 				Expect(err).To(MatchError("invalid ip: invalid-ip"))
+			})
+		})
+
+		Context("when input IPv6 is not valid", func() {
+			It("wraps and returns the error", func() {
+				err := store.Add(filePath, handle, ip, "invalid-ipv6", metadata)
+				Expect(err).To(MatchError("invalid ip: invalid-ipv6"))
 			})
 		})
 
