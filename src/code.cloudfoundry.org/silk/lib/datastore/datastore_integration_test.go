@@ -17,6 +17,7 @@ var _ = Describe("Datastore Lifecycle", func() {
 	var (
 		handle   string
 		ip       string
+		ipv6     string
 		store    *datastore.Store
 		metadata map[string]interface{}
 		filepath string
@@ -25,6 +26,7 @@ var _ = Describe("Datastore Lifecycle", func() {
 	BeforeEach(func() {
 		handle = "some-handle"
 		ip = "192.168.0.100"
+		ipv6 = "2100::1"
 		metadata = map[string]interface{}{
 			"AppID":         "some-appid",
 			"OrgID":         "some-orgid",
@@ -46,7 +48,7 @@ var _ = Describe("Datastore Lifecycle", func() {
 	})
 
 	AfterEach(func() {
-		os.Remove(filepath)
+		_ = os.Remove(filepath)
 	})
 
 	Context("when empty", func() {
@@ -69,6 +71,23 @@ var _ = Describe("Datastore Lifecycle", func() {
 			Expect(data).Should(HaveKey(handle))
 
 			Expect(data[handle].IP).To(Equal(ip))
+			for k, v := range metadata {
+				Expect(data[handle].Metadata).Should(HaveKeyWithValue(k, v))
+			}
+		})
+
+		It("can add entry with IPv6 address to datastore", func() {
+			By("adding an entry to store")
+			err := store.Add(filepath, handle, ip, ipv6, metadata)
+			Expect(err).NotTo(HaveOccurred())
+
+			By("verify entry is in store")
+			data, err := store.ReadAll(filepath)
+			Expect(err).NotTo(HaveOccurred())
+			Expect(data).Should(HaveKey(handle))
+
+			Expect(data[handle].IP).To(Equal(ip))
+			Expect(data[handle].IPv6).To(Equal(ipv6))
 			for k, v := range metadata {
 				Expect(data[handle].Metadata).Should(HaveKeyWithValue(k, v))
 			}
