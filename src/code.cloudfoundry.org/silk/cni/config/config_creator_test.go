@@ -203,6 +203,10 @@ var _ = Describe("ConfigCreator", func() {
 				By("Adding a route with fe80::1 as the gateway", func() {
 					Expect(conf.Container.RoutesIPv6).To(ConsistOf([]*types.Route{
 						&types.Route{
+							Dst: net.IPNet{
+								IP:   net.IPv6zero,
+								Mask: net.CIDRMask(0, 128),
+							},
 							GW: net.ParseIP("fe80::1"),
 						},
 					}))

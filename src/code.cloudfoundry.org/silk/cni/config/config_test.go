@@ -97,7 +97,14 @@ var _ = Describe("Config", func() {
 				containerConfig.AddressIPv6.IP = net.ParseIP("2001::1")
 				containerConfig.AddressIPv6.Hardware = net.HardwareAddr{0x01, 0x02, 0x03, 0x0A, 0xBC, 0xDE}
 				hostConfig.AddressIPv6.IP = net.ParseIP("fe80::1")
-				containerConfig.RoutesIPv6 = []*types.Route{{GW: hostConfig.AddressIPv6.IP}}
+				containerConfig.RoutesIPv6 = []*types.Route{
+					{
+						Dst: net.IPNet{
+							IP:   net.IPv6zero,
+							Mask: net.CIDRMask(0, 128),
+						},
+						GW: hostConfig.AddressIPv6.IP,
+					}}
 			})
 
 			It("returns a CNI v0.3.0 result with correct IPv4 config", func() {
