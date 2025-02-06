@@ -52,7 +52,7 @@ func (s *LinkOperations) EnableIPv4Forwarding() error {
 }
 
 func (s *LinkOperations) EnableIPv6Forwarding() error {
-	_, err := s.SysctlAdapter.Sysctl("net.ipv6.conf.eth0.forwarding", "1")
+	_, err := s.SysctlAdapter.Sysctl("net.ipv6.conf.all.forwarding", "1")
 	if err != nil {
 		return fmt.Errorf("enabling IPv6 forwarding: %s", err)
 	}

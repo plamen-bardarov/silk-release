@@ -192,7 +192,7 @@ var _ = Describe("Link Operations", func() {
 
 			Expect(fakeSysctlAdapter.SysctlCallCount()).To(Equal(1))
 			name, params := fakeSysctlAdapter.SysctlArgsForCall(0)
-			Expect(name).To(Equal("net.ipv6.conf.eth0.forwarding"))
+			Expect(name).To(Equal("net.ipv6.conf.all.forwarding"))
 			Expect(len(params)).To(Equal(1))
 			Expect(params[0]).To(Equal("1"))
 		})
