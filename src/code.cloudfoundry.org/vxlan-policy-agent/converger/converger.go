@@ -145,6 +145,7 @@ func (m *SinglePollCycle) DoPolicyCycleWithLastUpdatedCheck() error {
 }
 
 func (m *SinglePollCycle) DoPolicyCycle() error {
+	// TODO: what happens here if its ipv6 enabled deployment?
 	m.policyMutex.Lock()
 
 	if m.policyRuleSets == nil {
