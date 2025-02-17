@@ -782,7 +782,7 @@ func stopServer(server ifrit.Process) {
 		return
 	}
 	server.Signal(os.Interrupt)
-	Eventually(server.Wait()).Should(Receive())
+	Eventually(server.Wait(), DEFAULT_TIMEOUT).Should(Receive())
 }
 
 const (
