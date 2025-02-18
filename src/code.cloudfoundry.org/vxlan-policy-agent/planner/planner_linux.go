@@ -119,11 +119,6 @@ func (s ingressSlice) Swap(i, j int) {
 }
 
 func (p *VxlanPolicyPlanner) GetPolicyRulesAndChain() (enforcer.RulesWithChain, error) {
-	// Unsure how to handle policies for IPv6
-	if p.IPv6 {
-		return enforcer.RulesWithChain{}, nil
-	}
-
 	allContainers, err := p.readFile()
 	if err != nil {
 		p.Logger.Error("datastore", err)
