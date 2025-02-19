@@ -559,11 +559,26 @@ var _ = Describe("Netout", func() {
 					netOut.C2CLogging = true
 				})
 
-				It("does not write a log rule for denies", func() {
+				It("writes a log rule for denies", func() {
 					err := netOut.Initialize()
 					Expect(err).NotTo(HaveOccurred())
 
 					Expect(ipTables.BulkAppendCallCount()).To(Equal(7))
+
+					table, chain, rulespec := ipTables.BulkAppendArgsForCall(5)
+					Expect(table).To(Equal("filter"))
+					Expect(chain).To(Equal("overlay-some-container-handle"))
+					Expect(rulespec).To(Equal([]rules.IPTablesRule{
+						{"-d", "2001::1",
+							"-m", "state", "--state", "RELATED,ESTABLISHED",
+							"--jump", "ACCEPT"},
+						{"-d", "2001::1",
+							"-m", "limit", "--limit", "3/s", "--limit-burst", "3",
+							"--jump", "LOG", "--log-prefix", `"DENY_C2C_some-container-hand "`},
+						{"-d", "2001::1",
+							"--jump", "REJECT",
+							"--reject-with", "icmp6-port-unreachable"},
+					}))
 				})
 			})
 
