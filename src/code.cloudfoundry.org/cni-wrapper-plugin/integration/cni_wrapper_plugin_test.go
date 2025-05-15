@@ -380,6 +380,7 @@ var _ = Describe("CniWrapperPlugin", func() {
 			BeforeEach(func() {
 				skipIfIPv4()
 
+				inputStruct.EnableIPv6 = true
 				cniResult.IPs = append(cniResult.IPs, &current.IPConfig{
 					Address: net.IPNet{
 						IP:   net.ParseIP("2001:db8::1"),
@@ -1240,6 +1241,7 @@ var _ = Describe("CniWrapperPlugin", func() {
 			BeforeEach(func() {
 				skipIfIPv4()
 
+				inputStruct.EnableIPv6 = true
 				cniResult.IPs = append(cniResult.IPs, &current.IPConfig{
 					Address: net.IPNet{
 						IP:   net.ParseIP("2001:db8::1"),
