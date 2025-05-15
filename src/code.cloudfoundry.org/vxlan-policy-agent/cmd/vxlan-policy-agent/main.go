@@ -314,7 +314,7 @@ func main() {
 	asgPoller := &poller.Poller{
 		Logger:          logger,
 		PollInterval:    asgPollInterval,
-		SingleCycleFunc: policyCycleGroup.DoASGCycle,
+		SingleCycleFunc: policyCycleGroup.DoASGCycleWithLastUpdatedCheck,
 	}
 
 	forcePolicyPollCycleServerAddress := fmt.Sprintf("%s:%d", conf.ForcePolicyPollCycleHost, conf.ForcePolicyPollCyclePort)
